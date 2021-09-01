@@ -1,4 +1,6 @@
 package com.victorgarciarubio.idea_rating_api.services.impl;
 
-public class IdeaServiceImpl {
+import com.victorgarciarubio.idea_rating_api.services.IdeaService;
+
+public class IdeaServiceImpl implements IdeaService {
 }
