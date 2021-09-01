@@ -5,26 +5,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="idea")
-public class Idea extends AuditEntity{
+@Table(name="user_idea_evaluations")
+public class UserIdeaEvaluation extends AuditEntity {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
-
-    private String title;
-
-    private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", nullable=false)
     private User user;
 
-    @OneToMany(mappedBy = "idea", fetch = FetchType.LAZY)
-    private List<EvaluationSentence> evaluationSentenceList;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="evaluation_sentence_id", nullable=false)
+    private EvaluationSentence evaluationSentence;
 }
