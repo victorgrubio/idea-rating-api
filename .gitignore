@@ -1,3 +1,6 @@
+# Db models backup
+sql/*.bak
+
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
