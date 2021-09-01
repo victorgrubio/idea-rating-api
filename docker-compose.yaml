@@ -1,0 +1,48 @@
+version: "3.3"
+services:
+  db:
+    image: mysql:8.0.21
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_ROOT_PASSWORD
+    expose:
+      - 3306
+    volumes:
+      - db:/var/lib/mysql
+      - ./sql/mysql_init_data:/docker-entrypoint-initdb.d
+    networks:
+      - backend
+    ports:
+      - "3306:3306"
+    container_name: db
+  api:
+    image: victorgrubio/idea-rating-api:1.0.0
+    build:
+      context: .
+      args:
+        version: "1.0.0"
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL
+      - DATABASE_USER
+      - DATABASE_PASSWORD
+      - DATABASE_HOST=db
+      - DATABASE_PORT=3306
+      - API_PORT=8080
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+
+volumes:
+  db:
+
+networks:
+  backend:
+    driver: bridge

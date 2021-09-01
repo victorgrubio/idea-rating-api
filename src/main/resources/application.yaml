@@ -1,0 +1,64 @@
+spring:
+  profiles:
+    active: test
+---
+name: test-YAML
+environment: testing
+enabled: false
+server:
+  port: ${API_PORT:8080}
+spring:
+  config:
+    activate:
+      on-profile: test
+  data:
+    rest:
+      base-path: /api
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:file:./h2_database;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
+    username: ${DATABASE_USER:sql}
+    password: ${DATABASE_PASSWORD:password}
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        trace: false
+        web-allow-others: false
+  jpa:
+    database: MYSQL
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: false
+springdoc:
+  api-docs:
+    path: /api-docs
+---
+name: dev-YAML
+environment: development
+enabled: true
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: ${DATABASE_PASSWORD:root}
+    url: ${DATABASE_URL:jdbc:mysql://${DATABASE_HOST:db}:${DATABASE_PORT:3306}/earth2marsdb?createDatabaseIfNotExist=true&userSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC}
+    username: ${DATABASE_USER:root}
+    jpa:
+      database: MYSQL
+      hibernate:
+        ddl-auto: update
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQL8Dialect
+springdoc:
+  api-docs:
+    path: /api-docs
