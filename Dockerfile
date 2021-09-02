@@ -1,6 +1,6 @@
 ARG version
 
-FROM maven:3.8.0-jdk-11 AS build
+FROM maven:3.8.2-jdk-11 AS build
 WORKDIR /usr/src/app
 COPY pom.xml /usr/src/app
 RUN mvn verify --fail-never

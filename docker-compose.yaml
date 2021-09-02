@@ -14,7 +14,7 @@ services:
       - 3306
     volumes:
       - db:/var/lib/mysql
-      - ./sql/mysql_init_data:/docker-entrypoint-initdb.d
+      - ./sql/sql_init_data:/docker-entrypoint-initdb.d
     networks:
       - backend
     ports:
@@ -35,6 +35,7 @@ services:
       - DATABASE_HOST=db
       - DATABASE_PORT=3306
       - API_PORT=8080
+      - PROFILE=dev
     ports:
       - "8080:8080"
     networks:

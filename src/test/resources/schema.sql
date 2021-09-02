@@ -2,16 +2,6 @@
 -- jue 02 sep 2021 12:48:06 CEST
 -- Model: New Model    Version: 1.0
 -- MySQL Workbench Forward Engineering
-
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
-
--- -----------------------------------------------------
--- Schema IdeaRatingDB
--- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `IdeaRatingDB` ;
-
 -- -----------------------------------------------------
 -- Schema IdeaRatingDB
 -- -----------------------------------------------------
@@ -27,8 +17,7 @@ CREATE TABLE IF NOT EXISTS `IdeaRatingDB`.`users` (
   `username` VARCHAR(128) NOT NULL,
   `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NULL,
-  PRIMARY KEY (`username`))
-ENGINE = InnoDB;
+  PRIMARY KEY (`username`));
 
 
 -- -----------------------------------------------------
@@ -43,9 +32,7 @@ CREATE TABLE IF NOT EXISTS `IdeaRatingDB`.`ideas` (
   `description` VARCHAR(200) NULL,
   `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
+  PRIMARY KEY (`id`));
 
 -- -----------------------------------------------------
 -- Table `IdeaRatingDB`.`evaluation_sentences`
@@ -53,15 +40,14 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `IdeaRatingDB`.`evaluation_sentences` ;
 
 CREATE TABLE IF NOT EXISTS `IdeaRatingDB`.`evaluation_sentences` (
-  `id` BIGINT NOT NULL,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `content` VARCHAR(100) NOT NULL,
   `idea_id` BIGINT NOT NULL,
   `evaluation_weight_id` BIGINT NOT NULL,
   `type` ENUM('pro', 'con') NOT NULL,
   `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+  PRIMARY KEY (`id`));
 
 
 -- -----------------------------------------------------
@@ -75,8 +61,7 @@ CREATE TABLE IF NOT EXISTS `IdeaRatingDB`.`user_idea_evaluations` (
   `evaluation_sentence_id` BIGINT NOT NULL,
   `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+  PRIMARY KEY (`id`));
 
 
 -- -----------------------------------------------------
@@ -90,6 +75,5 @@ CREATE TABLE IF NOT EXISTS `IdeaRatingDB`.`evaluation_weights` (
   `weight` FLOAT NOT NULL,
   `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIME,
   `update_time` TIMESTAMP NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+  PRIMARY KEY (`id`));
 

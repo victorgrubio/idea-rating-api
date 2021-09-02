@@ -1,7 +1,11 @@
 # Env
 .env*
 
-# Db models backup
+# DB
+## DB files for H2
+*.db
+
+## DB models backup
 sql/*.bak
 
 HELP.md
