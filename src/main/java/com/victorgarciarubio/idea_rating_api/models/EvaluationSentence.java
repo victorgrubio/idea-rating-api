@@ -20,20 +20,20 @@ public class EvaluationSentence extends AuditEntity{
 
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type" , columnDefinition="ENUM('PRO','CON')" ,nullable = false )
     private SentenceType type;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name="idea_id", nullable=false, insertable=false,
-            foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT)
+            name="idea_id", nullable=false, insertable=false
     )
     private Idea idea;
 
     @ManyToOne
     @JoinColumn(
-            name="weight_id", nullable=false, insertable=false,
-            foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT)
+            name="evaluation_weight_id", nullable=false, insertable=false
     )
     private EvaluationWeight weight;
 

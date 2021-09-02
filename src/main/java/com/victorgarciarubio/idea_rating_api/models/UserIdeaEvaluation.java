@@ -17,15 +17,13 @@ public class UserIdeaEvaluation extends AuditEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name="user_id", insertable=false,
-            foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT)
+            name="user_id", nullable = false, insertable=false
     )
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name="evaluation_sentence_id", insertable=false,
-            foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT)
+            name="evaluation_sentence_id", nullable = false, insertable=false
     )
     private EvaluationSentence evaluationSentence;
 }

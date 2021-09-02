@@ -9,6 +9,6 @@ RUN mvn -f /usr/src/app/pom.xml clean package -DskipTests
 # Final build
 FROM gcr.io/distroless/java:11
 WORKDIR /usr/src/app
-COPY --from=build "/usr/src/app/target/idea-rating-api-1.0.0.jar" app.jar
+COPY --from=build "/usr/src/app/target/idea_rating_api-1.0.0.jar" app.jar
 EXPOSE 8080
 CMD ["app.jar"]

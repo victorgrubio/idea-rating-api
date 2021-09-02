@@ -23,8 +23,7 @@ public class Idea extends AuditEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name="user_id", nullable=false, insertable=false,
-            foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT)
+            name="user_id", nullable=false, insertable=false
     )
     private User user;
 

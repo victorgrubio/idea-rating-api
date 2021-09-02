@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `IdeaRatingDB`.`evaluation_weights` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(20) NOT NULL,
   `weight` FLOAT NOT NULL,
-  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIME,
+  `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` TIMESTAMP NULL,
   PRIMARY KEY (`id`));
 
