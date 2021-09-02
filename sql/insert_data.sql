@@ -6,7 +6,7 @@ INSERT INTO evaluation_weights(id, name, weight) values
 (2, 'MEDIUM', 2),
 (3, 'HIGH', 3);
 
-INSERT INTO idea(id, title, description, user_id) values
+INSERT INTO ideas(id, title, description, user_id) values
 (1, 'idea admin', 'description admin', 'ADMIN'),
 (2, 'idea victor', 'description victor','victorgarciar');
 
