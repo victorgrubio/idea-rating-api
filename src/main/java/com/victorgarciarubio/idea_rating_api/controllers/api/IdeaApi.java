@@ -48,7 +48,7 @@ public interface IdeaApi {
             @ApiResponse(responseCode = "200", description = "The list of user ideas.")
     })
     ResponseEntity<List<IdeaDtoResponse>> getUserIdeaList(
-            @Parameter(name = "UserId", required = true)
+            @Parameter(name = "username", required = true)
             @PathVariable String username
     );
 
@@ -69,9 +69,9 @@ public interface IdeaApi {
             @ApiResponse(responseCode = "201", description = "The newly created idea.")
     })
     ResponseEntity<IdeaDtoResponse> createIdea(
-            @Parameter(name = "Idea", required = true)
+            @Parameter(name = "idea", required = true)
             @RequestBody IdeaDtoRequest ideaDto,
-            @Parameter(name = "UserId", required = true)
+            @Parameter(name = "username", required = true)
             @PathVariable String username
     );
 
@@ -92,9 +92,9 @@ public interface IdeaApi {
             @ApiResponse(responseCode = "200", description = "The user idea.")
     })
     ResponseEntity<IdeaDtoResponse> getUserIdea(
-            @Parameter(name = "UserId", required = true)
+            @Parameter(name = "username", required = true)
             @PathVariable String username,
-            @Parameter(name = "IdeaId", required = true)
+            @Parameter(name = "ideaId", required = true)
             @PathVariable Long ideaId
     );
 
@@ -116,11 +116,11 @@ public interface IdeaApi {
             @ApiResponse(responseCode = "200", description = "The user updated idea")
     })
     ResponseEntity<IdeaDtoResponse> updateUserIdea(
-            @Parameter(name = "UserId", required = true)
+            @Parameter(name = "username", required = true)
             @PathVariable String username,
-            @Parameter(name = "IdeaId", required = true)
+            @Parameter(name = "ideaId", required = true)
             @PathVariable Long ideaId,
-            @Parameter(name = "Idea", required = true)
+            @Parameter(name = "idea", required = true)
             @RequestBody IdeaDtoRequest ideaDto
     );
 
@@ -140,9 +140,9 @@ public interface IdeaApi {
             @ApiResponse(responseCode = "200", description = "OK")
     })
     ResponseEntity<?> deleteUserIdea(
-            @Parameter(name = "UserId", required = true)
+            @Parameter(name = "username", required = true)
             @PathVariable String username,
-            @Parameter(name = "IdeaId", required = true)
+            @Parameter(name = "ideaId", required = true)
             @PathVariable Long ideaId
     );
 
@@ -163,11 +163,11 @@ public interface IdeaApi {
             @ApiResponse(responseCode = "200", description = "OK")
     })
     ResponseEntity<?> voteUserIdea(
-            @Parameter(name = "UserId", required = true)
+            @Parameter(name = "username", required = true)
             @PathVariable String username,
-            @Parameter(name = "IdeaId", required = true)
+            @Parameter(name = "ideaId", required = true)
             @PathVariable Long ideaId,
-            @Parameter(name = "Votes", required = true)
+            @Parameter(name = "votes", required = true)
             @PathVariable IdeaVoteDtoRequest ideaVotes
     );
 

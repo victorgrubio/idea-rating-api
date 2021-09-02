@@ -7,8 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="evaluation_sentences")
@@ -37,10 +39,14 @@ public class EvaluationSentence extends AuditEntity{
     )
     private EvaluationWeight weight;
 
+    @JsonIgnore
+    @Column(name="create_time")
+    public LocalDateTime createTime;
+
+    @JsonIgnore
+    @Column(name="update_time")
+    public LocalDateTime updateTime;
+
 }
 
 
-enum SentenceType {
-    PRO,
-    CON
-}

@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="ideas")
@@ -29,8 +30,4 @@ public class Idea extends AuditEntity{
 
     @OneToMany(mappedBy = "idea", fetch = FetchType.LAZY)
     private List<EvaluationSentence> evaluationSentenceList;
-
-    public void setId(Long ideaId) {
-        id = ideaId;
-    }
 }

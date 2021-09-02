@@ -1,11 +1,13 @@
 package com.victorgarciarubio.idea_rating_api.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="user_idea_evaluations")
