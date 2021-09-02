@@ -1,46 +1,69 @@
 package com.victorgarciarubio.idea_rating_api.controllers;
 
+import com.victorgarciarubio.idea_rating_api.config.ConfigConstants;
 import com.victorgarciarubio.idea_rating_api.controllers.api.IdeaApi;
 import com.victorgarciarubio.idea_rating_api.dtos.requests.IdeaDtoRequest;
 import com.victorgarciarubio.idea_rating_api.dtos.requests.IdeaVoteDtoRequest;
 import com.victorgarciarubio.idea_rating_api.dtos.responses.IdeaDtoResponse;
+import com.victorgarciarubio.idea_rating_api.services.IdeaService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+
+@RestController
+@CrossOrigin(origins = ConfigConstants.ORIGINS, maxAge = ConfigConstants.MAX_AGE)
 public class IdeaController implements IdeaApi {
+
+    private final IdeaService ideaService;
+
+    public IdeaController(IdeaService ideaService){
+        this.ideaService = ideaService;
+    }
+
     @Override
     public ResponseEntity<List<IdeaDtoResponse>> getAllIdeas() {
-        return null;
+
+        return new ResponseEntity<>(ideaService.findAll(), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<List<IdeaDtoResponse>> getUserIdeaList(String userId) {
-        return null;
+
+        return new ResponseEntity<>(ideaService.findAllByUserId(userId), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<IdeaDtoResponse> createIdea(IdeaDtoRequest ideaDto, String userId) {
-        return null;
+
+        return new ResponseEntity<>(ideaService.save(ideaDto, userId), HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<IdeaDtoResponse> getUserIdea(String userId, Long ideaId) {
-        return null;
+
+        return new ResponseEntity<>(ideaService.findById(ideaId), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<IdeaDtoResponse> updateUserIdea(String userId, Long ideaId, IdeaDtoRequest ideaDto) {
-        return null;
+        return new ResponseEntity<>(ideaService.update(ideaId, userId, ideaDto), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<?> deleteUserIdea(String userId, Long ideaId) {
-        return null;
+
+        ideaService.delete(ideaId, userId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<?> voteUserIdea(String userId, Long ideaId, IdeaVoteDtoRequest ideaVotes) {
-        return null;
+    public ResponseEntity<?> voteUserIdea(String voterId, Long ideaId, IdeaVoteDtoRequest ideaVote) {
+
+        ideaService.vote(voterId, ideaId, ideaVote);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

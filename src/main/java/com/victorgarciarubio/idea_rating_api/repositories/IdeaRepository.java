@@ -15,6 +15,8 @@ public interface IdeaRepository extends CrudRepository<Idea, Long> {
 
     public Optional<Idea> findById(Long ideaId);
 
+    public void deleteIdeaByIdAndUserId(Long ideaId, String userId);
+
 
 
 }
