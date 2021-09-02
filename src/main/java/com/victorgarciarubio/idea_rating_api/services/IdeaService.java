@@ -10,15 +10,15 @@ public interface IdeaService {
 
     List<IdeaDtoResponse> findAll();
 
-    List<IdeaDtoResponse> findAllByUserId(String userId);
+    List<IdeaDtoResponse> findAllByUserId(String username);
 
-    IdeaDtoResponse save(IdeaDtoRequest ideaDto, String userId);
+    IdeaDtoResponse save(IdeaDtoRequest ideaDto, String username);
 
     IdeaDtoResponse findById(Long ideaId);
 
-    IdeaDtoResponse update(Long ideaId, String userId, IdeaDtoRequest ideaDto);
+    IdeaDtoResponse update(Long ideaId, String username, IdeaDtoRequest ideaDto);
 
-    void delete(Long ideaId, String userId);
+    void delete(Long ideaId, String username);
 
     void vote(String voterId, Long ideaId, IdeaVoteDtoRequest ideaVoteDto);
 }

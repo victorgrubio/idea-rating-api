@@ -1,10 +1,10 @@
 package com.victorgarciarubio.idea_rating_api.models;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -19,4 +19,7 @@ public class EvaluationWeight extends AuditEntity {
     private String name;
 
     private Float weight;
+
+    @OneToMany(mappedBy = "weight", fetch = FetchType.LAZY)
+    private List<EvaluationSentence> evaluationSentenceList;
 }

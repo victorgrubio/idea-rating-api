@@ -31,32 +31,32 @@ public class IdeaController implements IdeaApi {
     }
 
     @Override
-    public ResponseEntity<List<IdeaDtoResponse>> getUserIdeaList(String userId) {
+    public ResponseEntity<List<IdeaDtoResponse>> getUserIdeaList(String username) {
 
-        return new ResponseEntity<>(ideaService.findAllByUserId(userId), HttpStatus.OK);
+        return new ResponseEntity<>(ideaService.findAllByUserId(username), HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<IdeaDtoResponse> createIdea(IdeaDtoRequest ideaDto, String userId) {
+    public ResponseEntity<IdeaDtoResponse> createIdea(IdeaDtoRequest ideaDto, String username) {
 
-        return new ResponseEntity<>(ideaService.save(ideaDto, userId), HttpStatus.CREATED);
+        return new ResponseEntity<>(ideaService.save(ideaDto, username), HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<IdeaDtoResponse> getUserIdea(String userId, Long ideaId) {
+    public ResponseEntity<IdeaDtoResponse> getUserIdea(String username, Long ideaId) {
 
         return new ResponseEntity<>(ideaService.findById(ideaId), HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<IdeaDtoResponse> updateUserIdea(String userId, Long ideaId, IdeaDtoRequest ideaDto) {
-        return new ResponseEntity<>(ideaService.update(ideaId, userId, ideaDto), HttpStatus.OK);
+    public ResponseEntity<IdeaDtoResponse> updateUserIdea(String username, Long ideaId, IdeaDtoRequest ideaDto) {
+        return new ResponseEntity<>(ideaService.update(ideaId, username, ideaDto), HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<?> deleteUserIdea(String userId, Long ideaId) {
+    public ResponseEntity<?> deleteUserIdea(String username, Long ideaId) {
 
-        ideaService.delete(ideaId, userId);
+        ideaService.delete(ideaId, username);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

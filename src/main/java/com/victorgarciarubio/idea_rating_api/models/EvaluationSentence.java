@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Table(name="evaluation_sentences")
 public class EvaluationSentence extends AuditEntity{
 
@@ -25,10 +24,17 @@ public class EvaluationSentence extends AuditEntity{
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="idea_id", nullable=false)
+    @JoinColumn(
+            name="idea_id", nullable=false, insertable=false,
+            foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT)
+    )
     private Idea idea;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(
+            name="weight_id", nullable=false, insertable=false,
+            foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT)
+    )
     private EvaluationWeight weight;
 
 }

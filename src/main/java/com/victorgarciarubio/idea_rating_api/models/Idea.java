@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="idea")
+@Table(name="ideas")
 public class Idea extends AuditEntity{
 
     @Id
@@ -22,7 +22,10 @@ public class Idea extends AuditEntity{
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id", nullable=false)
+    @JoinColumn(
+            name="user_id", nullable=false, insertable=false,
+            foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT)
+    )
     private User user;
 
     @OneToMany(mappedBy = "idea", fetch = FetchType.LAZY)

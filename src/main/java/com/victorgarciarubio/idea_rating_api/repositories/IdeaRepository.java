@@ -11,11 +11,11 @@ public interface IdeaRepository extends CrudRepository<Idea, Long> {
     @Override
     public List<Idea> findAll();
 
-    public List<Idea> findAllByUserId(String userId);
+    public List<Idea> findIdeasByUser_Username(String username);
 
     public Optional<Idea> findById(Long ideaId);
 
-    public void deleteIdeaByIdAndUserId(Long ideaId, String userId);
+    public void deleteIdeaByIdAndUser_Username(Long ideaId, String username);
 
 
 

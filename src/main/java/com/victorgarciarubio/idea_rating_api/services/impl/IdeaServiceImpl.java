@@ -46,17 +46,17 @@ public class IdeaServiceImpl implements IdeaService {
     }
 
     @Override
-    public List<IdeaDtoResponse> findAllByUserId(String userId) {
-        return this.ideaRepository.findAllByUserId(userId).stream()
+    public List<IdeaDtoResponse> findAllByUserId(String username) {
+        return this.ideaRepository.findIdeasByUser_Username(username).stream()
                 .map(IdeaDtoResponse::fromEntity)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public IdeaDtoResponse save(IdeaDtoRequest ideaDto, String userId) {
+    public IdeaDtoResponse save(IdeaDtoRequest ideaDto, String username) {
         List<String> errors = IdeaDtoValidator.validate(ideaDto);
         if (errors.isEmpty()){
-            Idea idea = ideaRepository.save(IdeaDtoRequest.toEntity(ideaDto, userId));
+            Idea idea = ideaRepository.save(IdeaDtoRequest.toEntity(ideaDto, username));
             return IdeaDtoResponse.fromEntity(idea);
         }
         log.error("Idea is not valid {}", ideaDto);
@@ -82,13 +82,13 @@ public class IdeaServiceImpl implements IdeaService {
     }
 
     @Override
-    public IdeaDtoResponse update(Long ideaId, String userId, IdeaDtoRequest ideaDto) {
+    public IdeaDtoResponse update(Long ideaId, String username, IdeaDtoRequest ideaDto) {
         if (checkNullId(ideaId)){
             return null;
         };
         List<String> errors = IdeaDtoValidator.validate(ideaDto);
         if (errors.isEmpty()){
-            Idea idea = IdeaDtoRequest.toEntity(ideaDto, userId);
+            Idea idea = IdeaDtoRequest.toEntity(ideaDto, username);
             idea.setId(ideaId);
             return IdeaDtoResponse.fromEntity(idea);
         }
@@ -97,11 +97,11 @@ public class IdeaServiceImpl implements IdeaService {
     }
 
     @Override
-    public void delete(Long ideaId, String userId) {
+    public void delete(Long ideaId, String username) {
         if (checkNullId(ideaId)){
             return;
         };
-        ideaRepository.deleteIdeaByIdAndUserId(ideaId, userId);
+        ideaRepository.deleteIdeaByIdAndUser_Username(ideaId, username);
 
     }
 

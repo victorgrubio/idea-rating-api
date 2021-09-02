@@ -15,11 +15,10 @@ spring:
     rest:
       base-path: /api
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:file:./h2_database;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
-    username: ${DATABASE_USER:sql}
-    password: ${DATABASE_PASSWORD:password}
+    url: jdbc:h2:file:./h2_database;DB_CLOSE_ON_EXIT=TRUE;AUTO_SERVER=TRUE
+    username: sql
+    password: sql
+    driver-class-name: org.h2.Driver
   h2:
     console:
       enabled: true
@@ -28,14 +27,20 @@ spring:
         trace: false
         web-allow-others: false
   jpa:
+    show-sql: true
     database: MYSQL
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-    show-sql: false
+      generate-ddl: false
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+      data-locations: classpath*:data.sql
 springdoc:
   api-docs:
     path: /api-docs
@@ -43,6 +48,8 @@ springdoc:
 name: dev-YAML
 environment: development
 enabled: true
+server:
+  port: ${API_PORT:8080}
 spring:
   config:
     activate:
@@ -52,13 +59,14 @@ spring:
     password: ${DATABASE_PASSWORD:root}
     url: ${DATABASE_URL:jdbc:mysql://${DATABASE_HOST:db}:${DATABASE_PORT:3306}/earth2marsdb?createDatabaseIfNotExist=true&userSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC}
     username: ${DATABASE_USER:root}
-    jpa:
-      database: MYSQL
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
       hibernate:
-        ddl-auto: update
-      properties:
-        hibernate:
-          dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
 springdoc:
   api-docs:
     path: /api-docs

@@ -34,13 +34,13 @@ public interface IdeaApi {
     );
 
     /**
-     * GET /{userId}/ideas - List user ideas
+     * GET /{username}/ideas - List user ideas
      *
-     * @param userId userId
+     * @param username username
      * @return list of user ideas
      */
     @GetMapping(
-            value = "/{userId}/ideas",
+            value = "/{username}/ideas",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Operation(summary = "Get user ideas", description = "Get a list of user ideas")
@@ -49,18 +49,18 @@ public interface IdeaApi {
     })
     ResponseEntity<List<IdeaDtoResponse>> getUserIdeaList(
             @Parameter(name = "UserId", required = true)
-            @PathVariable String userId
+            @PathVariable String username
     );
 
     /**
-     * POST /{userId}/ideas - Creates new idea
+     * POST /{username}/ideas - Creates new idea
      *
-     * @param userId userId
+     * @param username username
      * @param ideaDto new idea
      * @return created idea
      */
     @PostMapping(
-            value = "/{userId}/ideas",
+            value = "/{username}/ideas",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -72,19 +72,19 @@ public interface IdeaApi {
             @Parameter(name = "Idea", required = true)
             @RequestBody IdeaDtoRequest ideaDto,
             @Parameter(name = "UserId", required = true)
-            @PathVariable String userId
+            @PathVariable String username
     );
 
 
     /**
-     * GET /{userId}/ideas/{ideaId} - Get user idea
+     * GET /{username}/ideas/{ideaId} - Get user idea
      *
-     * @param userId user id
+     * @param username user id
      * @param ideaId idea id
      * @return user idea
      */
     @GetMapping(
-            value = "/{userId}/ideas/{ideaId}",
+            value = "/{username}/ideas/{ideaId}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Operation(summary = "Get user idea by id", description = "Get user idea by id")
@@ -93,21 +93,21 @@ public interface IdeaApi {
     })
     ResponseEntity<IdeaDtoResponse> getUserIdea(
             @Parameter(name = "UserId", required = true)
-            @PathVariable String userId,
+            @PathVariable String username,
             @Parameter(name = "IdeaId", required = true)
             @PathVariable Long ideaId
     );
 
     /**
-     * PUT /{userId}/ideas/{ideaId} - Updates user idea
+     * PUT /{username}/ideas/{ideaId} - Updates user idea
      *
-     * @param userId user id
+     * @param username user id
      * @param ideaDto updated idea
      * @param ideaId idea id
      * @return user idea
      */
     @PutMapping(
-            value = "/{userId}/ideas/{ideaId}",
+            value = "/{username}/ideas/{ideaId}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -117,7 +117,7 @@ public interface IdeaApi {
     })
     ResponseEntity<IdeaDtoResponse> updateUserIdea(
             @Parameter(name = "UserId", required = true)
-            @PathVariable String userId,
+            @PathVariable String username,
             @Parameter(name = "IdeaId", required = true)
             @PathVariable Long ideaId,
             @Parameter(name = "Idea", required = true)
@@ -125,14 +125,14 @@ public interface IdeaApi {
     );
 
     /**
-     * DELETE /{userId}/ideas/{ideaId} - Deletes user idea
+     * DELETE /{username}/ideas/{ideaId} - Deletes user idea
      *
-     * @param userId user id
+     * @param username user id
      * @param ideaId idea id
      * @return OK
      */
     @DeleteMapping(
-            value = "/{userId}/ideas/{ideaId}",
+            value = "/{username}/ideas/{ideaId}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Operation(summary = "Deletes user idea by id", description = "Deletes user idea")
@@ -141,20 +141,20 @@ public interface IdeaApi {
     })
     ResponseEntity<?> deleteUserIdea(
             @Parameter(name = "UserId", required = true)
-            @PathVariable String userId,
+            @PathVariable String username,
             @Parameter(name = "IdeaId", required = true)
             @PathVariable Long ideaId
     );
 
     /**
-     * POST /{userId}/ideas/{ideaId}/votes - Votes for a user idea
+     * POST /{username}/ideas/{ideaId}/votes - Votes for a user idea
      *
-     * @param userId user id
+     * @param username user id
      * @param ideaId idea id
      * @return OK
      */
     @PostMapping(
-            value = "/{userId}/ideas/{ideaId}/votes",
+            value = "/{username}/ideas/{ideaId}/votes",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -164,7 +164,7 @@ public interface IdeaApi {
     })
     ResponseEntity<?> voteUserIdea(
             @Parameter(name = "UserId", required = true)
-            @PathVariable String userId,
+            @PathVariable String username,
             @Parameter(name = "IdeaId", required = true)
             @PathVariable Long ideaId,
             @Parameter(name = "Votes", required = true)
