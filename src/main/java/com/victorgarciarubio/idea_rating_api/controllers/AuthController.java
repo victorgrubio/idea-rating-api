@@ -4,7 +4,6 @@ package com.victorgarciarubio.idea_rating_api.controllers;
 import com.victorgarciarubio.idea_rating_api.config.ConfigConstants;
 import com.victorgarciarubio.idea_rating_api.controllers.api.AuthApi;
 import com.victorgarciarubio.idea_rating_api.dtos.requests.UserDtoRequest;
-import com.victorgarciarubio.idea_rating_api.dtos.responses.IdeaDtoResponse;
 import com.victorgarciarubio.idea_rating_api.models.User;
 import com.victorgarciarubio.idea_rating_api.services.AuthService;
 import org.springframework.http.HttpStatus;
