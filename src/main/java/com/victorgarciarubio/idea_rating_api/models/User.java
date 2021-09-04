@@ -22,7 +22,4 @@ public class User extends AuditEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Idea> ideaList;
 
-    public static User toEntity(DtoRequest dtoRequest){
-        return null;
-    }
 }
