@@ -28,11 +28,13 @@ services:
     env_file:
       - .env
     environment:
-      - DATABASE_URL
-      - DATABASE_USER
-      - DATABASE_PASSWORD
-      - DATABASE_HOST=db
-      - DATABASE_PORT=3306
+      - DATABASE_DRIVER=mysql
+      - DATABASE_USER=idearating
+      - DATABASE_PASSWORD=idearating
+      - DATABASE_NAME=idearatingdb
+      - DATABASE_HOST=localhost
+      - DATABASE_PORT=3307
+      - DATABASE_CONFIG_QUERY=createDatabaseIfNotExist=true&userSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
       - API_PORT=8080
       - PROFILE=dev
     ports:
