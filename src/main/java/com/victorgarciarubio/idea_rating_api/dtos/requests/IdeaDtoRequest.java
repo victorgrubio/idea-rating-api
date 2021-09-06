@@ -22,7 +22,7 @@ public class IdeaDtoRequest implements DtoRequest{
 
     private String username;
 
-    private List<EvaluationSentenceDto> evaluationSentences;
+    private List<EvaluationSentenceDtoRequest> evaluationSentences;
 
 
     public static Idea toEntity(IdeaDtoRequest ideaDto, User user) {

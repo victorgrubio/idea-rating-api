@@ -21,7 +21,7 @@ public interface IdeaService {
 
     void delete(Long ideaId, String username);
 
-    void vote(String voterId, Long ideaId, IdeaVoteDtoRequest ideaVoteDto);
+    void vote(String creatorUsername, Long ideaId, IdeaVoteDtoRequest ideaVoteDto);
 
     List<EvaluationWeight> findAllSentenceWeights();
 }

@@ -9,12 +9,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Optional;
+
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EvaluationSentenceDto implements DtoRequest {
+public class EvaluationSentenceDtoRequest implements DtoRequest {
 
     private String content;
 
@@ -22,7 +24,7 @@ public class EvaluationSentenceDto implements DtoRequest {
 
     private EvaluationWeight weight;
 
-    public static EvaluationSentence toEntity(EvaluationSentenceDto evaluationSentenceDto, Idea idea){
+    public static EvaluationSentence toEntity(EvaluationSentenceDtoRequest evaluationSentenceDto, Idea idea) {
 
         EvaluationSentence sentence = new EvaluationSentence();
         sentence.setContent(evaluationSentenceDto.getContent());
@@ -32,12 +34,4 @@ public class EvaluationSentenceDto implements DtoRequest {
         return sentence;
     }
 
-    public static EvaluationSentenceDto fromEntity(EvaluationSentence evaluationSentence){
-
-        return EvaluationSentenceDto.builder()
-                .content(evaluationSentence.getContent())
-                .type(evaluationSentence.getType())
-                .weight(evaluationSentence.getWeight())
-                .build();
-    }
 }

@@ -1,21 +1,14 @@
 package com.victorgarciarubio.idea_rating_api.services.impl;
 
-import com.victorgarciarubio.idea_rating_api.dtos.requests.EvaluationSentenceDto;
+import com.victorgarciarubio.idea_rating_api.dtos.requests.EvaluationSentenceDtoRequest;
 import com.victorgarciarubio.idea_rating_api.dtos.requests.IdeaDtoRequest;
 import com.victorgarciarubio.idea_rating_api.dtos.requests.IdeaVoteDtoRequest;
-import com.victorgarciarubio.idea_rating_api.dtos.responses.DtoResponse;
 import com.victorgarciarubio.idea_rating_api.dtos.responses.IdeaDtoResponse;
 import com.victorgarciarubio.idea_rating_api.exceptions.EntityNotFoundException;
 import com.victorgarciarubio.idea_rating_api.exceptions.ErrorCodes;
 import com.victorgarciarubio.idea_rating_api.exceptions.InvalidEntityException;
-import com.victorgarciarubio.idea_rating_api.models.EvaluationSentence;
-import com.victorgarciarubio.idea_rating_api.models.EvaluationWeight;
-import com.victorgarciarubio.idea_rating_api.models.Idea;
-import com.victorgarciarubio.idea_rating_api.models.User;
-import com.victorgarciarubio.idea_rating_api.repositories.EvaluationSentenceRepository;
-import com.victorgarciarubio.idea_rating_api.repositories.EvaluationWeightRepository;
-import com.victorgarciarubio.idea_rating_api.repositories.IdeaRepository;
-import com.victorgarciarubio.idea_rating_api.repositories.UserRepository;
+import com.victorgarciarubio.idea_rating_api.models.*;
+import com.victorgarciarubio.idea_rating_api.repositories.*;
 import com.victorgarciarubio.idea_rating_api.services.IdeaService;
 import com.victorgarciarubio.idea_rating_api.validators.IdeaDtoValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -35,18 +28,21 @@ public class IdeaServiceImpl implements IdeaService {
     public final EvaluationSentenceRepository evaluationSentenceRepository;
     public final UserRepository userRepository;
     public final EvaluationWeightRepository evaluationWeightRepository;
+    public final UserIdeaEvaluationRepository userIdeaEvaluationRepository;
 
 
     public IdeaServiceImpl(
             IdeaRepository ideaRepository,
             EvaluationSentenceRepository evaluationSentenceRepository,
             UserRepository userRepository,
-            EvaluationWeightRepository evaluationWeightRepository
+            EvaluationWeightRepository evaluationWeightRepository,
+            UserIdeaEvaluationRepository userIdeaEvaluationRepository
     ){
         this.ideaRepository = ideaRepository;
         this.evaluationSentenceRepository = evaluationSentenceRepository;
         this.userRepository = userRepository;
         this.evaluationWeightRepository = evaluationWeightRepository;
+        this.userIdeaEvaluationRepository = userIdeaEvaluationRepository;
     }
     @Override
     public List<IdeaDtoResponse> findAll() {
@@ -72,7 +68,7 @@ public class IdeaServiceImpl implements IdeaService {
                 List<EvaluationSentence> evaluationSentenceList = new ArrayList<>();
                 for (int i = 0; i < ideaDto.getEvaluationSentences().size(); i++) {
                     evaluationSentenceList.add(
-                            EvaluationSentenceDto.toEntity(ideaDto.getEvaluationSentences().get(i), idea)
+                            EvaluationSentenceDtoRequest.toEntity(ideaDto.getEvaluationSentences().get(i), idea)
                     );
                 }
                 evaluationSentenceRepository.saveAll(evaluationSentenceList);
@@ -113,13 +109,13 @@ public class IdeaServiceImpl implements IdeaService {
             if (user.isPresent()) {
                 Idea idea = IdeaDtoRequest.toEntity(ideaDto, user.get());
                 List<EvaluationSentence> evaluationSentenceList = new ArrayList<>();
-                List<EvaluationSentenceDto> evaluationSentenceDtoList = ideaDto.getEvaluationSentences();
-                for (EvaluationSentenceDto evaluationSentenceDto : evaluationSentenceDtoList) {
+                List<EvaluationSentenceDtoRequest> evaluationSentenceDtoList = ideaDto.getEvaluationSentences();
+                for (EvaluationSentenceDtoRequest evaluationSentenceDto : evaluationSentenceDtoList) {
                     if (evaluationSentenceDto == null) {
                         continue;
                     }
                     evaluationSentenceList.add(
-                            EvaluationSentenceDto.toEntity(evaluationSentenceDto, idea)
+                            EvaluationSentenceDtoRequest.toEntity(evaluationSentenceDto, idea)
                     );
                 }
                 idea.setId(ideaId);
@@ -128,6 +124,8 @@ public class IdeaServiceImpl implements IdeaService {
                 idea.setEvaluationSentenceList(evaluationSentenceList);
                 return IdeaDtoResponse.fromEntity(idea);
             }
+            log.error("User not found {}", username);
+            throw new EntityNotFoundException("User not found", ErrorCodes.USER_NOT_FOUND);
         }
         log.error("Idea is not valid {}", ideaDto);
         throw new InvalidEntityException("Idea is not valid", ErrorCodes.IDEA_NOT_VALID, errors);
@@ -143,10 +141,32 @@ public class IdeaServiceImpl implements IdeaService {
     }
 
     @Override
-    public void vote(String voterId, Long ideaId, IdeaVoteDtoRequest ideaVoteDto) {
+    public void vote(String creatorUsername, Long ideaId, IdeaVoteDtoRequest ideaVoteDto) {
         if (checkNullId(ideaId)) return;
-        if (!userRepository.existsUserByUsername(voterId)) return;
 
+        Optional<User> user = userRepository.findById(ideaVoteDto.getUsername());
+        User voter = null;
+        if (user.isEmpty()) {
+            User newUser = new User();
+            newUser.setUsername(ideaVoteDto.getUsername());
+            userRepository.save(newUser);
+            voter = newUser;
+        } else {
+            voter = user.get();
+        }
+
+        List<UserIdeaEvaluation> userIdeaEvaluationList = new ArrayList<>();
+
+        for (Long sentenceId : ideaVoteDto.getSentenceVoteIdList()) {
+            UserIdeaEvaluation userIdeaEvaluation = new UserIdeaEvaluation();
+            Optional<EvaluationSentence> evaluationSentence = evaluationSentenceRepository.findById(sentenceId);
+            if (evaluationSentence.isPresent()) {
+                userIdeaEvaluation.setUser(voter);
+                userIdeaEvaluation.setEvaluationSentence(evaluationSentence.get());
+                userIdeaEvaluationList.add(userIdeaEvaluation);
+            }
+        }
+        userIdeaEvaluationRepository.saveAll(userIdeaEvaluationList);
     }
 
     @Override

@@ -27,14 +27,15 @@ public class Idea extends AuditEntity {
             cascade = {CascadeType.ALL}
     )
     List<EvaluationSentence> evaluationSentenceList;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "user_id", nullable = false
     )
     private User user;
 
-    public Double computeRating() {
-        double rating = 0.0;
+    public float computeRating() {
+        float rating = 0.0F;
         for (EvaluationSentence evaluationSentence : evaluationSentenceList) {
             rating += evaluationSentence.computeRating();
         }

@@ -1,7 +1,7 @@
 package com.victorgarciarubio.idea_rating_api.validators;
 
 import com.victorgarciarubio.idea_rating_api.dtos.requests.DtoRequest;
-import com.victorgarciarubio.idea_rating_api.dtos.requests.EvaluationSentenceDto;
+import com.victorgarciarubio.idea_rating_api.dtos.requests.EvaluationSentenceDtoRequest;
 import com.victorgarciarubio.idea_rating_api.dtos.requests.IdeaDtoRequest;
 import org.apache.commons.lang3.StringUtils;
 
@@ -21,15 +21,15 @@ public class IdeaDtoValidator implements DtoValidator{
             errors.add("Please add some pro/con sentences");
         }
 
-        if (StringUtils.isEmpty(ideaDtoRequest.getTitle())){
+        if (StringUtils.isEmpty(ideaDtoRequest.getTitle())) {
             errors.add("Please add the title");
         }
-        if (StringUtils.isEmpty(ideaDtoRequest.getDescription())){
+        if (StringUtils.isEmpty(ideaDtoRequest.getDescription())) {
             errors.add("Please add the description");
         }
 
-        List<EvaluationSentenceDto> evaluationSentenceDtoList = ideaDtoRequest.getEvaluationSentences();
-        for (EvaluationSentenceDto evaluationSentenceDto : evaluationSentenceDtoList) {
+        List<EvaluationSentenceDtoRequest> evaluationSentenceDtoList = ideaDtoRequest.getEvaluationSentences();
+        for (EvaluationSentenceDtoRequest evaluationSentenceDto : evaluationSentenceDtoList) {
             errors.addAll(EvaluationSentenceValidator.validate(evaluationSentenceDto));
         }
 

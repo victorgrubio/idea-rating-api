@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity
 @Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="user_idea_evaluations")
@@ -28,4 +28,8 @@ public class UserIdeaEvaluation extends AuditEntity {
             name = "evaluation_sentence_id", nullable = false
     )
     private EvaluationSentence evaluationSentence;
+
+    public float computeRating() {
+        return (0.5F * evaluationSentence.getWeight().getWeight());
+    }
 }

@@ -1,6 +1,5 @@
 package com.victorgarciarubio.idea_rating_api.dtos.responses;
 
-import com.victorgarciarubio.idea_rating_api.dtos.requests.EvaluationSentenceDto;
 import com.victorgarciarubio.idea_rating_api.models.DatabaseModel;
 import com.victorgarciarubio.idea_rating_api.models.Idea;
 import com.victorgarciarubio.idea_rating_api.models.User;
@@ -27,9 +26,9 @@ public class IdeaDtoResponse implements DtoResponse{
 
     private String username;
 
-    private List<EvaluationSentenceDto> evaluationSentences;
+    private List<EvaluationSentenceDtoResponse> evaluationSentenceList;
 
-    private Double rating;
+    private Float rating;
 
     
     public static IdeaDtoResponse fromEntity(Idea idea) {
@@ -38,9 +37,9 @@ public class IdeaDtoResponse implements DtoResponse{
                 .id(idea.getId())
                 .title(idea.getTitle())
                 .username(idea.getUser().getUsername())
-                .evaluationSentences(
+                .evaluationSentenceList(
                         idea.getEvaluationSentenceList().stream()
-                                .map(EvaluationSentenceDto::fromEntity)
+                                .map(EvaluationSentenceDtoResponse::fromEntity)
                                 .collect(Collectors.toList())
                 )
                 .rating(idea.computeRating())

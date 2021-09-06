@@ -119,8 +119,8 @@ public interface IdeaApi {
      * PUT /{username}/ideas/{ideaId} - Updates user idea
      *
      * @param username user id
-     * @param ideaDto updated idea
-     * @param ideaId idea id
+     * @param ideaId   idea id
+     * @param ideaDto  updated idea
      * @return user idea
      */
     @PutMapping(
@@ -166,8 +166,9 @@ public interface IdeaApi {
     /**
      * POST /{username}/ideas/{ideaId}/votes - Votes for a user idea
      *
-     * @param username user id
+     * @param username creator user id
      * @param ideaId idea id
+     * @param ideaVoteDto votes for the idea
      * @return OK
      */
     @PostMapping(
@@ -184,8 +185,8 @@ public interface IdeaApi {
             @PathVariable String username,
             @Parameter(name = "ideaId", required = true)
             @PathVariable Long ideaId,
-            @Parameter(name = "votes", required = true)
-            @PathVariable IdeaVoteDtoRequest ideaVotes
+            @Parameter(name = "ideaVoteDto", required = true)
+            @RequestBody IdeaVoteDtoRequest ideaVoteDto
     );
 
 

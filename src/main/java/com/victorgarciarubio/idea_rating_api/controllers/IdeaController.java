@@ -66,9 +66,8 @@ public class IdeaController implements IdeaApi {
     }
 
     @Override
-    public ResponseEntity<?> voteUserIdea(String voterId, Long ideaId, IdeaVoteDtoRequest ideaVote) {
-
-        ideaService.vote(voterId, ideaId, ideaVote);
+    public ResponseEntity<?> voteUserIdea(String username, Long ideaId, IdeaVoteDtoRequest ideaVote) {
+        ideaService.vote(username, ideaId, ideaVote);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

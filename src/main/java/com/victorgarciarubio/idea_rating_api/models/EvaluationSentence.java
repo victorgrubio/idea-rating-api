@@ -2,12 +2,14 @@ package com.victorgarciarubio.idea_rating_api.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.victorgarciarubio.idea_rating_api.repositories.UserIdeaEvaluationRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -38,6 +40,14 @@ public class EvaluationSentence extends AuditEntity {
     )
     private EvaluationWeight weight;
 
+
+    @JsonIgnore
+    @OneToMany(
+            mappedBy = "evaluationSentence", fetch = FetchType.LAZY,
+            cascade = {CascadeType.ALL}
+    )
+    List<UserIdeaEvaluation> userIdeaEvaluationList;
+
     @JsonIgnore
     @Column(name = "create_time")
     public LocalDateTime createTime;
@@ -46,9 +56,11 @@ public class EvaluationSentence extends AuditEntity {
     @Column(name = "update_time")
     public LocalDateTime updateTime;
 
-    public double computeRating() {
-        double score = weight.getWeight();
-        // TODO compute votes
+    public float computeRating() {
+        Float score = weight.getWeight();
+        for (UserIdeaEvaluation userIdeaEvaluation : userIdeaEvaluationList) {
+            score += userIdeaEvaluation.computeRating();
+        }
         if (type.equals("con")) return -score;
         return score;
     }
