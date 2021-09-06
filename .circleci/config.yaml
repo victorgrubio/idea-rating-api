@@ -1,0 +1,29 @@
+version: 2.1
+orbs:
+  docker: circleci/docker@1.4.0
+  heroku: circleci/heroku@1.2.2
+workflows:
+  build-push-heroku-docker:
+    jobs:
+      - docker/hadolint:
+          dockerfiles: Dockerfile
+      - docker/publish:
+          dockerfile: Dockerfile
+          image: victorgrubio/idea-rating-api
+          tag: 'latest,1.0.0'
+      - heroku-docker-deploy
+jobs:
+  heroku-docker-deploy:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - heroku/install
+      - heroku/check-authentication
+      - setup_remote_docker
+      - checkout
+      - heroku/push-docker-image:
+          app-name: $HEROKU_APP_NAME
+          recursive: true
+      - heroku/release-docker-image:
+          app-name: $HEROKU_APP_NAME
+          process-types: web
