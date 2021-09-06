@@ -1,9 +1,6 @@
 package com.victorgarciarubio.idea_rating_api.validators;
 
 import com.victorgarciarubio.idea_rating_api.dtos.requests.EvaluationSentenceDto;
-import com.victorgarciarubio.idea_rating_api.dtos.requests.IdeaDtoRequest;
-import com.victorgarciarubio.idea_rating_api.models.EvaluationWeight;
-import com.victorgarciarubio.idea_rating_api.models.SentenceType;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
