@@ -20,8 +20,6 @@ public class IdeaDtoRequest implements DtoRequest{
 
     private String description;
 
-    private String username;
-
     private List<EvaluationSentenceDtoRequest> evaluationSentences;
 
 

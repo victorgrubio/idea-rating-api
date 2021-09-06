@@ -36,6 +36,7 @@ public class IdeaDtoResponse implements DtoResponse{
         return IdeaDtoResponse.builder()
                 .id(idea.getId())
                 .title(idea.getTitle())
+                .description(idea.getDescription())
                 .username(idea.getUser().getUsername())
                 .evaluationSentenceList(
                         idea.getEvaluationSentenceList().stream()
