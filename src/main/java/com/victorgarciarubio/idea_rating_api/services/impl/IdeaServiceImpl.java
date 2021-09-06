@@ -9,9 +9,11 @@ import com.victorgarciarubio.idea_rating_api.exceptions.EntityNotFoundException;
 import com.victorgarciarubio.idea_rating_api.exceptions.ErrorCodes;
 import com.victorgarciarubio.idea_rating_api.exceptions.InvalidEntityException;
 import com.victorgarciarubio.idea_rating_api.models.EvaluationSentence;
+import com.victorgarciarubio.idea_rating_api.models.EvaluationWeight;
 import com.victorgarciarubio.idea_rating_api.models.Idea;
 import com.victorgarciarubio.idea_rating_api.models.User;
 import com.victorgarciarubio.idea_rating_api.repositories.EvaluationSentenceRepository;
+import com.victorgarciarubio.idea_rating_api.repositories.EvaluationWeightRepository;
 import com.victorgarciarubio.idea_rating_api.repositories.IdeaRepository;
 import com.victorgarciarubio.idea_rating_api.repositories.UserRepository;
 import com.victorgarciarubio.idea_rating_api.services.IdeaService;
@@ -31,16 +33,19 @@ public class IdeaServiceImpl implements IdeaService {
     public final IdeaRepository ideaRepository;
     public final EvaluationSentenceRepository evaluationSentenceRepository;
     public final UserRepository userRepository;
+    public final EvaluationWeightRepository evaluationWeightRepository;
 
 
     public IdeaServiceImpl(
             IdeaRepository ideaRepository,
             EvaluationSentenceRepository evaluationSentenceRepository,
-            UserRepository userRepository
+            UserRepository userRepository,
+            EvaluationWeightRepository evaluationWeightRepository
     ){
         this.ideaRepository = ideaRepository;
         this.evaluationSentenceRepository = evaluationSentenceRepository;
         this.userRepository = userRepository;
+        this.evaluationWeightRepository = evaluationWeightRepository;
     }
     @Override
     public List<IdeaDtoResponse> findAll() {
@@ -131,6 +136,11 @@ public class IdeaServiceImpl implements IdeaService {
         if (checkNullId(ideaId)) return;
         if (userRepository.existsUserByUsername(voterId) == null) return;
 
+    }
+
+    @Override
+    public List<EvaluationWeight> findAllSentenceWeights() {
+        return evaluationWeightRepository.findAll();
     }
 
 }

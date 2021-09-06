@@ -3,6 +3,7 @@ package com.victorgarciarubio.idea_rating_api.controllers.api;
 import com.victorgarciarubio.idea_rating_api.dtos.requests.IdeaDtoRequest;
 import com.victorgarciarubio.idea_rating_api.dtos.requests.IdeaVoteDtoRequest;
 import com.victorgarciarubio.idea_rating_api.dtos.responses.IdeaDtoResponse;
+import com.victorgarciarubio.idea_rating_api.models.EvaluationWeight;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -31,6 +32,22 @@ public interface IdeaApi {
             @ApiResponse(responseCode = "200", description = "List of all ideas.")
     })
     ResponseEntity<List<IdeaDtoResponse>> getAllIdeas(
+    );
+
+    /**
+     * GET /ideas/sentence-weights - List all ideas weights
+     *
+     * @return list of ideas weights available
+     */
+    @GetMapping(
+            value = "/ideas/sentence-weights",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(summary = "Get sentence weights available", description = "Get a list of all sentece weights available")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of all ideas.")
+    })
+    ResponseEntity<List<EvaluationWeight>> getIdeaSentenceWeights(
     );
 
     /**

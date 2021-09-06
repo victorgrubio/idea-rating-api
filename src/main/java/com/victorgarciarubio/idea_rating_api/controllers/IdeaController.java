@@ -5,6 +5,7 @@ import com.victorgarciarubio.idea_rating_api.controllers.api.IdeaApi;
 import com.victorgarciarubio.idea_rating_api.dtos.requests.IdeaDtoRequest;
 import com.victorgarciarubio.idea_rating_api.dtos.requests.IdeaVoteDtoRequest;
 import com.victorgarciarubio.idea_rating_api.dtos.responses.IdeaDtoResponse;
+import com.victorgarciarubio.idea_rating_api.models.EvaluationWeight;
 import com.victorgarciarubio.idea_rating_api.services.IdeaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class IdeaController implements IdeaApi {
 
     private final IdeaService ideaService;
 
-    public IdeaController(IdeaService ideaService){
+    public IdeaController(IdeaService ideaService) {
         this.ideaService = ideaService;
     }
 
@@ -28,6 +29,11 @@ public class IdeaController implements IdeaApi {
     public ResponseEntity<List<IdeaDtoResponse>> getAllIdeas() {
 
         return new ResponseEntity<>(ideaService.findAll(), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<EvaluationWeight>> getIdeaSentenceWeights() {
+        return new ResponseEntity<>(ideaService.findAllSentenceWeights(), HttpStatus.OK);
     }
 
     @Override

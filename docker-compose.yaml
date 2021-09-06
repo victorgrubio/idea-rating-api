@@ -19,6 +19,10 @@ services:
     ports:
       - "3307:3306"
     container_name: db
+    healthcheck:
+      test: "/etc/init.d/mysql status"
+      interval: 1s
+      retries: 120
   api:
     image: victorgrubio/idea-rating-api:1.0.0
     build:
@@ -32,8 +36,8 @@ services:
       - DATABASE_USER=idearating
       - DATABASE_PASSWORD=idearating
       - DATABASE_NAME=idearatingdb
-      - DATABASE_HOST=localhost
-      - DATABASE_PORT=3307
+      - DATABASE_HOST=db
+      - DATABASE_PORT=3306
       - DATABASE_CONFIG_QUERY=createDatabaseIfNotExist=true&userSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
       - API_PORT=8080
       - PROFILE=dev
@@ -41,6 +45,11 @@ services:
       - "8080:8080"
     networks:
       - backend
+    restart: on-failure
+    depends_on:
+      - db
+    links:
+      - db
 
 volumes:
   db:
