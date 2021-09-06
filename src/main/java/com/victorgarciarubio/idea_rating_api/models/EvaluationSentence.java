@@ -13,40 +13,45 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="evaluation_sentences")
-public class EvaluationSentence extends AuditEntity{
+@Table(name = "evaluation_sentences")
+public class EvaluationSentence extends AuditEntity {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String content;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type" , columnDefinition="ENUM('PRO','CON')" ,nullable = false )
-    private SentenceType type;
+    @Column(name = "type", columnDefinition = "ENUM('pro','con')", nullable = false)
+    private String type;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name="idea_id", nullable=false, insertable=false
+            name = "idea_id"
     )
     private Idea idea;
 
     @ManyToOne
     @JoinColumn(
-            name="evaluation_weight_id", nullable=false, insertable=false
+            name = "evaluation_weight_id", nullable = false
     )
     private EvaluationWeight weight;
 
     @JsonIgnore
-    @Column(name="create_time")
+    @Column(name = "create_time")
     public LocalDateTime createTime;
 
     @JsonIgnore
-    @Column(name="update_time")
+    @Column(name = "update_time")
     public LocalDateTime updateTime;
 
+    public double computeRating() {
+        double score = weight.getWeight();
+        // TODO compute votes
+        if (type.equals("con")) return -score;
+        return score;
+    }
 }
 
 

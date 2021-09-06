@@ -27,7 +27,6 @@ public class IdeaController implements IdeaApi {
 
     @Override
     public ResponseEntity<List<IdeaDtoResponse>> getAllIdeas() {
-
         return new ResponseEntity<>(ideaService.findAll(), HttpStatus.OK);
     }
 

@@ -12,22 +12,32 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="ideas")
-public class Idea extends AuditEntity{
+public class Idea extends AuditEntity {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
 
     private String description;
 
+    @OneToMany(
+            mappedBy = "idea", fetch = FetchType.LAZY,
+            cascade = {CascadeType.ALL}
+    )
+    List<EvaluationSentence> evaluationSentenceList;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name="user_id", nullable=false, insertable=false
+            name = "user_id", nullable = false
     )
     private User user;
 
-    @OneToMany(mappedBy = "idea", fetch = FetchType.LAZY)
-    private List<EvaluationSentence> evaluationSentenceList;
+    public Double computeRating() {
+        double rating = 0.0;
+        for (EvaluationSentence evaluationSentence : evaluationSentenceList) {
+            rating += evaluationSentence.computeRating();
+        }
+        return rating;
+    }
 }

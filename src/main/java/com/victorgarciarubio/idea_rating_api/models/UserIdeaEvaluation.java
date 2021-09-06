@@ -19,13 +19,13 @@ public class UserIdeaEvaluation extends AuditEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name="user_id", nullable = false, insertable=false
+            name = "user_id", nullable = false
     )
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name="evaluation_sentence_id", nullable = false, insertable=false
+            name = "evaluation_sentence_id", nullable = false
     )
     private EvaluationSentence evaluationSentence;
 }

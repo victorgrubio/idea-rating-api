@@ -29,6 +29,8 @@ public class IdeaDtoResponse implements DtoResponse{
 
     private List<EvaluationSentenceDto> evaluationSentences;
 
+    private Double rating;
+
     
     public static IdeaDtoResponse fromEntity(Idea idea) {
 
@@ -41,6 +43,7 @@ public class IdeaDtoResponse implements DtoResponse{
                                 .map(EvaluationSentenceDto::fromEntity)
                                 .collect(Collectors.toList())
                 )
+                .rating(idea.computeRating())
                 .build();
 
 

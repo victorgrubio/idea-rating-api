@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -56,7 +57,7 @@ public class IdeaServiceImpl implements IdeaService {
 
     @Override
     public List<IdeaDtoResponse> findAllByUserId(String username) {
-        return this.ideaRepository.findIdeasByUser_Username(username).stream()
+        return this.ideaRepository.findIdeasByUserUsername(username).stream()
                 .map(IdeaDtoResponse::fromEntity)
                 .collect(Collectors.toList());
     }
@@ -64,18 +65,20 @@ public class IdeaServiceImpl implements IdeaService {
     @Override
     public IdeaDtoResponse save(IdeaDtoRequest ideaDto, String username) {
         List<String> errors = IdeaDtoValidator.validate(ideaDto);
-        if (errors.isEmpty()){
-            User user = userRepository.existsUserByUsername(username);
-            Idea idea = ideaRepository.save(IdeaDtoRequest.toEntity(ideaDto, user));
-            List<EvaluationSentence> evaluationSentenceList = new ArrayList<>();
-            for (int i=0; i<ideaDto.getEvaluationSentences().size(); i++){
-                evaluationSentenceList.add(
-                        EvaluationSentenceDto.toEntity(ideaDto.getEvaluationSentences().get(i), idea)
-                );
+        if (errors.isEmpty()) {
+            Optional<User> user = userRepository.findById(username);
+            if (user.isPresent()) {
+                Idea idea = ideaRepository.save(IdeaDtoRequest.toEntity(ideaDto, user.get()));
+                List<EvaluationSentence> evaluationSentenceList = new ArrayList<>();
+                for (int i = 0; i < ideaDto.getEvaluationSentences().size(); i++) {
+                    evaluationSentenceList.add(
+                            EvaluationSentenceDto.toEntity(ideaDto.getEvaluationSentences().get(i), idea)
+                    );
+                }
+                evaluationSentenceRepository.saveAll(evaluationSentenceList);
+                idea.setEvaluationSentenceList(evaluationSentenceList);
+                return IdeaDtoResponse.fromEntity(idea);
             }
-            evaluationSentenceRepository.saveAll(evaluationSentenceList);
-            idea.setEvaluationSentenceList(evaluationSentenceList);
-            return IdeaDtoResponse.fromEntity(idea);
         }
         log.error("Idea is not valid {}", ideaDto);
         throw new InvalidEntityException("Idea is not valid", ErrorCodes.IDEA_NOT_VALID, errors);
@@ -105,18 +108,26 @@ public class IdeaServiceImpl implements IdeaService {
             return null;
         }
         List<String> errors = IdeaDtoValidator.validate(ideaDto);
-        if (errors.isEmpty()){
-            User user = userRepository.existsUserByUsername(username);
-            Idea idea = IdeaDtoRequest.toEntity(ideaDto, user);
-            List<EvaluationSentence> evaluationSentenceList = new ArrayList<>();
-            for (int i=0; i<ideaDto.getEvaluationSentences().size(); i++){
-                evaluationSentenceList.add(
-                        EvaluationSentenceDto.toEntity(ideaDto.getEvaluationSentences().get(i), idea)
-                );
+        if (errors.isEmpty()) {
+            Optional<User> user = userRepository.findById(username);
+            if (user.isPresent()) {
+                Idea idea = IdeaDtoRequest.toEntity(ideaDto, user.get());
+                List<EvaluationSentence> evaluationSentenceList = new ArrayList<>();
+                List<EvaluationSentenceDto> evaluationSentenceDtoList = ideaDto.getEvaluationSentences();
+                for (EvaluationSentenceDto evaluationSentenceDto : evaluationSentenceDtoList) {
+                    if (evaluationSentenceDto == null) {
+                        continue;
+                    }
+                    evaluationSentenceList.add(
+                            EvaluationSentenceDto.toEntity(evaluationSentenceDto, idea)
+                    );
+                }
+                idea.setId(ideaId);
+                ideaRepository.save(idea);
+                evaluationSentenceRepository.saveAll(evaluationSentenceList);
+                idea.setEvaluationSentenceList(evaluationSentenceList);
+                return IdeaDtoResponse.fromEntity(idea);
             }
-            evaluationSentenceRepository.saveAll(evaluationSentenceList);
-            idea.setId(ideaId);
-            return IdeaDtoResponse.fromEntity(idea);
         }
         log.error("Idea is not valid {}", ideaDto);
         throw new InvalidEntityException("Idea is not valid", ErrorCodes.IDEA_NOT_VALID, errors);
@@ -127,14 +138,14 @@ public class IdeaServiceImpl implements IdeaService {
         if (checkNullId(ideaId)){
             return;
         }
-        ideaRepository.deleteIdeaByIdAndUser_Username(ideaId, username);
+        ideaRepository.deleteIdeaByIdAndUserUsername(ideaId, username);
 
     }
 
     @Override
     public void vote(String voterId, Long ideaId, IdeaVoteDtoRequest ideaVoteDto) {
         if (checkNullId(ideaId)) return;
-        if (userRepository.existsUserByUsername(voterId) == null) return;
+        if (!userRepository.existsUserByUsername(voterId)) return;
 
     }
 

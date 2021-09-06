@@ -18,7 +18,7 @@ public class EvaluationSentenceDto implements DtoRequest {
 
     private String content;
 
-    private SentenceType type;
+    private String type;
 
     private EvaluationWeight weight;
 
