@@ -16,6 +16,7 @@ workflows:
       - heroku-docker-deploy:
           context:
             - heroku
+            - docker
 jobs:
   heroku-docker-deploy:
     docker:
@@ -31,6 +32,7 @@ jobs:
       - heroku/push-docker-image:
           app-name: $HEROKU_APP_NAME
           recursive: true
+          process-types: web
       - heroku/release-docker-image:
           app-name: $HEROKU_APP_NAME
           process-types: web
