@@ -58,10 +58,12 @@ public class EvaluationSentence extends AuditEntity {
 
     public float computeRating() {
         Float score = weight.getWeight();
-        for (UserIdeaEvaluation userIdeaEvaluation : userIdeaEvaluationList) {
-            score += userIdeaEvaluation.computeRating();
+        if (this.userIdeaEvaluationList != null){
+            for (UserIdeaEvaluation userIdeaEvaluation : this.userIdeaEvaluationList) {
+                score += userIdeaEvaluation.computeRating();
+            }
         }
-        if (type.equals("con")) return -score;
+        if (type.equals("CON")) return -score;
         return score;
     }
 }
