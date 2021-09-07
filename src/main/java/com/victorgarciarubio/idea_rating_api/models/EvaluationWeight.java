@@ -25,14 +25,6 @@ public class EvaluationWeight extends AuditEntity {
     private Float weight;
 
     @JsonIgnore
-    @Column(name="create_time")
-    public LocalDateTime createTime;
-
-    @JsonIgnore
-    @Column(name="update_time")
-    public LocalDateTime updateTime;
-
-    @JsonIgnore
     @OneToMany(mappedBy = "weight", fetch = FetchType.LAZY)
     private List<EvaluationSentence> evaluationSentenceList;
 }

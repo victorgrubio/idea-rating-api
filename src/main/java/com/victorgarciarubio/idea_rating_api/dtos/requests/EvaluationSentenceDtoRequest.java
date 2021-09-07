@@ -18,6 +18,8 @@ import java.util.Optional;
 @Builder
 public class EvaluationSentenceDtoRequest implements DtoRequest {
 
+    private Optional<Long> id;
+
     private String content;
 
     private String type;
@@ -27,6 +29,9 @@ public class EvaluationSentenceDtoRequest implements DtoRequest {
     public static EvaluationSentence toEntity(EvaluationSentenceDtoRequest evaluationSentenceDto, Idea idea) {
 
         EvaluationSentence sentence = new EvaluationSentence();
+        if (evaluationSentenceDto.getId().isPresent()){
+            sentence.setId(evaluationSentenceDto.getId().get());
+        }
         sentence.setContent(evaluationSentenceDto.getContent());
         sentence.setType(evaluationSentenceDto.getType());
         sentence.setIdea(idea);

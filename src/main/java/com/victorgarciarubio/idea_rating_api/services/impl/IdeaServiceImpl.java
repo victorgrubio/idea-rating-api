@@ -119,6 +119,7 @@ public class IdeaServiceImpl implements IdeaService {
                     );
                 }
                 idea.setId(ideaId);
+                idea.setEvaluationSentenceList(new ArrayList<>());
                 ideaRepository.save(idea);
                 evaluationSentenceRepository.saveAll(evaluationSentenceList);
                 idea.setEvaluationSentenceList(evaluationSentenceList);

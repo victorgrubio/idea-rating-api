@@ -23,8 +23,7 @@ public class Idea extends AuditEntity {
     private String description;
 
     @OneToMany(
-            mappedBy = "idea", fetch = FetchType.LAZY,
-            cascade = {CascadeType.ALL}
+            mappedBy = "idea", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true
     )
     List<EvaluationSentence> evaluationSentenceList;
 

@@ -2,7 +2,6 @@ package com.victorgarciarubio.idea_rating_api.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.victorgarciarubio.idea_rating_api.repositories.UserIdeaEvaluationRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,7 +42,7 @@ public class EvaluationSentence extends AuditEntity {
 
     @JsonIgnore
     @OneToMany(
-            mappedBy = "evaluationSentence", fetch = FetchType.LAZY,
+            mappedBy = "evaluationSentence", fetch = FetchType.EAGER,
             cascade = {CascadeType.ALL}
     )
     List<UserIdeaEvaluation> userIdeaEvaluationList;
