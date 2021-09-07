@@ -49,7 +49,7 @@ name: dev-YAML
 environment: development
 enabled: true
 server:
-  port: 8080
+  port: ${PORT:8080}
 spring:
   config:
     activate:
