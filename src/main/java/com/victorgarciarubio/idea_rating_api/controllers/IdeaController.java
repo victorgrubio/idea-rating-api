@@ -42,19 +42,16 @@ public class IdeaController implements IdeaApi {
 
     @Override
     public ResponseEntity<List<IdeaDtoResponse>> getUserIdeaList(String username) {
-
         return new ResponseEntity<>(ideaService.findAllByUserId(username), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<IdeaDtoResponse> createIdea(IdeaDtoRequest ideaDto, String username) {
-
         return new ResponseEntity<>(ideaService.save(ideaDto, username), HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<IdeaDtoResponse> getUserIdea(String username, Long ideaId) {
-
         return new ResponseEntity<>(ideaService.findById(ideaId), HttpStatus.OK);
     }
 
@@ -65,7 +62,6 @@ public class IdeaController implements IdeaApi {
 
     @Override
     public ResponseEntity<?> deleteUserIdea(String username, Long ideaId) {
-
         ideaService.delete(ideaId, username);
         return new ResponseEntity<>(HttpStatus.OK);
     }

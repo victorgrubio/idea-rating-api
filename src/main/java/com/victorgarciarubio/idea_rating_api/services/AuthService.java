@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 
 public interface AuthService {
 
-    public User login(UserDtoRequest userDtoRequest);
+    User login(UserDtoRequest userDtoRequest);
 }

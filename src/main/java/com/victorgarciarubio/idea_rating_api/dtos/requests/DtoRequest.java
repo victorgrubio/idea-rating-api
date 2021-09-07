@@ -5,7 +5,7 @@ import org.hibernate.dialect.Database;
 
 public interface DtoRequest {
 
-    public static DatabaseModel toEntity(DtoRequest dtoRequest){
+    static DatabaseModel toEntity(DtoRequest dtoRequest){
         return null;
     }
 }

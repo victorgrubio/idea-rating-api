@@ -13,14 +13,14 @@ import java.util.Optional;
 public interface IdeaRepository extends CrudRepository<Idea, Long> {
 
     @Override
-    public List<Idea> findAll();
+    List<Idea> findAll();
 
-    public List<Idea> findIdeasByUserUsername(String username);
+    List<Idea> findIdeasByUserUsername(String username);
 
-    public Optional<Idea> findById(Long ideaId);
+    Optional<Idea> findById(Long ideaId);
 
     @Modifying
     @Transactional(rollbackFor = {SQLException.class})
     @Query("delete from Idea i where i.id = :ideaId and i.user.username = :username")
-    public void deleteIdeaByIdAndUserUsername(Long ideaId, String username);
+    void deleteIdeaByIdAndUserUsername(Long ideaId, String username);
 }
