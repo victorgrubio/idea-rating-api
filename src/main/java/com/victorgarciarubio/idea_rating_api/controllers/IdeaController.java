@@ -16,7 +16,12 @@ import java.util.List;
 
 
 @RestController
-@CrossOrigin(origins = ConfigConstants.ORIGINS, maxAge = ConfigConstants.MAX_AGE)
+@CrossOrigin(
+        origins = {
+                "http://localhost:4200", "https://idea-rating-frontend.vercel.app"
+        },
+        maxAge = ConfigConstants.MAX_AGE
+)
 public class IdeaController implements IdeaApi {
 
     private final IdeaService ideaService;
