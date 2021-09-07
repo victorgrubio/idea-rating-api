@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `evaluation_sentences`(
                                                      `content`              VARCHAR(100)        NOT NULL,
                                                      `idea_id`              BIGINT              NOT NULL,
                                                      `evaluation_weight_id` BIGINT              NOT NULL,
-                                                     `type`                 ENUM ('PRO', 'con') NOT NULL,
+                                                     `type`                 ENUM ('PRO', 'CON') NOT NULL,
                                                      `create_time`          TIMESTAMP           NULL DEFAULT CURRENT_TIMESTAMP,
                                                      `update_time`          TIMESTAMP           NULL,
                                                      PRIMARY KEY (`id`)

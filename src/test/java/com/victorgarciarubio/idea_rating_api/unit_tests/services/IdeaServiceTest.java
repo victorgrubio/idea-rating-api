@@ -1,12 +1,10 @@
 package com.victorgarciarubio.idea_rating_api.unit_tests.services;
 
-import com.victorgarciarubio.idea_rating_api.dtos.requests.IdeaDtoRequest;
 import com.victorgarciarubio.idea_rating_api.dtos.responses.IdeaDtoResponse;
 import com.victorgarciarubio.idea_rating_api.models.EvaluationSentence;
 import com.victorgarciarubio.idea_rating_api.models.Idea;
 import com.victorgarciarubio.idea_rating_api.models.User;
 import com.victorgarciarubio.idea_rating_api.repositories.*;
-import com.victorgarciarubio.idea_rating_api.services.IdeaService;
 import com.victorgarciarubio.idea_rating_api.services.impl.IdeaServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +65,9 @@ class IdeaServiceTest {
         Idea idea = new Idea();
         idea.setTitle("Title");
         idea.setDescription("Description");
+        User user = new User();
+        user.setUsername("test");
+        idea.setUser(user);
         idea.setEvaluationSentenceList(new ArrayList<EvaluationSentence>());
         return idea;
     }
