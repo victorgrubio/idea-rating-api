@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
-  docker: circleci/docker@1.4.0
-  heroku: circleci/heroku@1.2.2
+  docker: circleci/docker@1.7.0
+  heroku: circleci/heroku@1.2.6
 workflows:
   build-push-heroku-docker:
     jobs:
@@ -11,11 +11,18 @@ workflows:
           dockerfile: Dockerfile
           image: victorgrubio/idea-rating-api
           tag: 'latest,1.0.0'
-      - heroku-docker-deploy
+          context:
+            - docker
+      - heroku-docker-deploy:
+          context:
+            - heroku
 jobs:
   heroku-docker-deploy:
     docker:
       - image: 'cimg/base:stable'
+        auth:
+          username: $DOCKER_LOGIN
+          password: $DOCKER_PASSWORD  
     steps:
       - heroku/install
       - heroku/check-authentication
