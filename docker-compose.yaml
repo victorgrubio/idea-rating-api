@@ -2,13 +2,11 @@ version: "3.3"
 services:
   db:
     image: mysql:8.0.21
-    env_file:
-      - .env
     environment:
-      - MYSQL_DATABASE
-      - MYSQL_USER
-      - MYSQL_PASSWORD
-      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=idearatingdb
+      - MYSQL_USER=idearating
+      - MYSQL_PASSWORD=idearating
+      - MYSQL_ROOT_PASSWORD=root
     expose:
       - 3306
     volumes:
@@ -29,8 +27,6 @@ services:
       context: .
       args:
         version: "1.0.0"
-    env_file:
-      - .env
     environment:
       - DATABASE_DRIVER=mysql
       - DATABASE_USER=idearating
@@ -42,7 +38,7 @@ services:
       - API_PORT=8080
       - PROFILE=dev
     ports:
-      - "8080:8080"
+      - "8080:${API_PORT:8080}"
     networks:
       - backend
     restart: on-failure
