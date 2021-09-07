@@ -22,14 +22,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public User login(UserDtoRequest userDtoRequest) {
-        Optional<User> user = this.userRepository.findById(userDtoRequest.getUsername());
-        if (user.isPresent()){
-            return user.get();
-        } else {
-            User newUser = UserDtoRequest.toEntity(userDtoRequest);
-            this.userRepository.save(newUser);
-            return newUser;
-        }
+        return this.userRepository.findById(userDtoRequest.getUsername())
+                .orElse(
+                    this.userRepository.save(UserDtoRequest.toEntity(userDtoRequest))
+                );
 
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -60,24 +61,32 @@ public class IdeaServiceImpl implements IdeaService {
 
     @Override
     public IdeaDtoResponse save(IdeaDtoRequest ideaDto, String username) {
-        List<String> errors = IdeaDtoValidator.validate(ideaDto);
-        if (errors.isEmpty()) {
-            Optional<User> user = userRepository.findById(username);
-            if (user.isPresent()) {
-                Idea idea = ideaRepository.save(IdeaDtoRequest.toEntity(ideaDto, user.get()));
-                List<EvaluationSentence> evaluationSentenceList = new ArrayList<>();
-                for (int i = 0; i < ideaDto.getEvaluationSentences().size(); i++) {
-                    evaluationSentenceList.add(
-                            EvaluationSentenceDtoRequest.toEntity(ideaDto.getEvaluationSentences().get(i), idea)
-                    );
-                }
-                evaluationSentenceRepository.saveAll(evaluationSentenceList);
-                idea.setEvaluationSentenceList(evaluationSentenceList);
-                return IdeaDtoResponse.fromEntity(idea);
-            }
+        manageErrors(ideaDto);
+        return userRepository.findById(username).map(user -> {
+            Idea idea = createIdea(ideaDto, user);
+            return IdeaDtoResponse.fromEntity(idea);
+        }).orElseThrow(
+                () -> new EntityNotFoundException("User not found", ErrorCodes.USER_NOT_FOUND)
+        );
+    }
+
+    private Idea createIdea(IdeaDtoRequest ideaDto, User user){
+        Idea idea = ideaRepository.save(IdeaDtoRequest.toEntity(ideaDto, user));
+        List<EvaluationSentence> evaluationSentenceList = ideaDto.getEvaluationSentences()
+                .stream().map(sentence ->
+                        EvaluationSentenceDtoRequest.toEntity(sentence, idea)
+                ).collect(Collectors.toList());
+        evaluationSentenceRepository.saveAll(evaluationSentenceList);
+        idea.setEvaluationSentenceList(evaluationSentenceList);
+        return idea;
+    }
+
+    private void manageErrors(IdeaDtoRequest ideaDtoRequest){
+        List<String> errors = IdeaDtoValidator.validate(ideaDtoRequest);
+        if(!errors.isEmpty()){
+            log.error("Idea is not valid {}", ideaDtoRequest);
+            throw new InvalidEntityException("Idea is not valid", ErrorCodes.IDEA_NOT_VALID, errors);
         }
-        log.error("Idea is not valid {}", ideaDto);
-        throw new InvalidEntityException("Idea is not valid", ErrorCodes.IDEA_NOT_VALID, errors);
     }
 
     @Override
@@ -103,71 +112,62 @@ public class IdeaServiceImpl implements IdeaService {
         if (checkNullId(ideaId)){
             return null;
         }
-        List<String> errors = IdeaDtoValidator.validate(ideaDto);
-        if (errors.isEmpty()) {
-            Optional<User> user = userRepository.findById(username);
-            if (user.isPresent()) {
-                Idea idea = IdeaDtoRequest.toEntity(ideaDto, user.get());
-                List<EvaluationSentence> evaluationSentenceList = new ArrayList<>();
-                List<EvaluationSentenceDtoRequest> evaluationSentenceDtoList = ideaDto.getEvaluationSentences();
-                for (EvaluationSentenceDtoRequest evaluationSentenceDto : evaluationSentenceDtoList) {
-                    if (evaluationSentenceDto == null) {
-                        continue;
-                    }
-                    evaluationSentenceList.add(
-                            EvaluationSentenceDtoRequest.toEntity(evaluationSentenceDto, idea)
-                    );
-                }
-                idea.setId(ideaId);
-                idea.setEvaluationSentenceList(new ArrayList<>());
-                ideaRepository.save(idea);
-                evaluationSentenceRepository.saveAll(evaluationSentenceList);
-                idea.setEvaluationSentenceList(evaluationSentenceList);
-                return IdeaDtoResponse.fromEntity(idea);
-            }
-            log.error("User not found {}", username);
-            throw new EntityNotFoundException("User not found", ErrorCodes.USER_NOT_FOUND);
-        }
-        log.error("Idea is not valid {}", ideaDto);
-        throw new InvalidEntityException("Idea is not valid", ErrorCodes.IDEA_NOT_VALID, errors);
+        manageErrors(ideaDto);
+        return userRepository.findById(username).map(user -> {
+            Idea idea = updateIdea(ideaId, user, ideaDto);
+            return IdeaDtoResponse.fromEntity(idea);
+        }).orElseThrow(() -> new EntityNotFoundException("User not found", ErrorCodes.USER_NOT_FOUND));
+    }
+
+    private Idea updateIdea(Long ideaId, User user, IdeaDtoRequest ideaDto){
+        Idea idea = IdeaDtoRequest.toEntity(ideaDto, user);
+        List<EvaluationSentence> evaluationSentenceList = ideaDto.getEvaluationSentences()
+                .stream()
+                .filter(Objects::nonNull)
+                .map(sentence -> EvaluationSentenceDtoRequest.toEntity(sentence, idea))
+                .collect(Collectors.toList());
+        idea.setId(ideaId);
+        idea.setEvaluationSentenceList(new ArrayList<>());
+        ideaRepository.save(idea);
+        evaluationSentenceRepository.saveAll(evaluationSentenceList);
+        idea.setEvaluationSentenceList(evaluationSentenceList);
+        return idea;
     }
 
     @Override
     public void delete(Long ideaId, String username) {
-        if (checkNullId(ideaId)){
-            return;
-        }
+        if (checkNullId(ideaId)) return;
         ideaRepository.deleteIdeaByIdAndUserUsername(ideaId, username);
-
     }
 
     @Override
     public void vote(String creatorUsername, Long ideaId, IdeaVoteDtoRequest ideaVoteDto) {
         if (checkNullId(ideaId)) return;
 
-        Optional<User> user = userRepository.findById(ideaVoteDto.getUsername());
-        User voter = null;
-        if (user.isEmpty()) {
-            User newUser = new User();
-            newUser.setUsername(ideaVoteDto.getUsername());
-            userRepository.save(newUser);
-            voter = newUser;
-        } else {
-            voter = user.get();
-        }
-
-        List<UserIdeaEvaluation> userIdeaEvaluationList = new ArrayList<>();
-
-        for (Long sentenceId : ideaVoteDto.getSentenceVoteIdList()) {
-            UserIdeaEvaluation userIdeaEvaluation = new UserIdeaEvaluation();
-            Optional<EvaluationSentence> evaluationSentence = evaluationSentenceRepository.findById(sentenceId);
-            if (evaluationSentence.isPresent()) {
-                userIdeaEvaluation.setUser(voter);
-                userIdeaEvaluation.setEvaluationSentence(evaluationSentence.get());
-                userIdeaEvaluationList.add(userIdeaEvaluation);
-            }
-        }
+        User user = userRepository.findById(ideaVoteDto.getUsername())
+                .orElseGet(()->createNewUser(ideaVoteDto));
+        List<UserIdeaEvaluation> userIdeaEvaluationList = ideaVoteDto.getSentenceVoteIdList()
+        .stream()
+        .map(sentenceId -> evaluationSentenceRepository.findById(sentenceId).map(sentence ->
+                createIdeaEvaluation(user, sentence)
+        ).orElseThrow(
+                () -> new EntityNotFoundException("Sentence not found", ErrorCodes.EVALUATION_SENTENCE_NOT_FOUND))
+        ).collect(Collectors.toList());
         userIdeaEvaluationRepository.saveAll(userIdeaEvaluationList);
+    }
+
+
+    private User createNewUser(IdeaVoteDtoRequest ideaVoteDtoRequest){
+        User newUser = new User();
+        newUser.setUsername(ideaVoteDtoRequest.getUsername());
+        return userRepository.save(newUser);
+    }
+
+    private UserIdeaEvaluation createIdeaEvaluation(User user, EvaluationSentence sentence){
+        UserIdeaEvaluation userIdeaEvaluation = new UserIdeaEvaluation();
+        userIdeaEvaluation.setUser(user);
+        userIdeaEvaluation.setEvaluationSentence(sentence);
+        return userIdeaEvaluation;
     }
 
     @Override

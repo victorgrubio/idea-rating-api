@@ -29,9 +29,13 @@ public class IdeaDtoValidator implements DtoValidator{
         }
 
         List<EvaluationSentenceDtoRequest> evaluationSentenceDtoList = ideaDtoRequest.getEvaluationSentences();
-        for (EvaluationSentenceDtoRequest evaluationSentenceDto : evaluationSentenceDtoList) {
-            errors.addAll(EvaluationSentenceValidator.validate(evaluationSentenceDto));
-        }
+
+        evaluationSentenceDtoList.stream().map(
+                evaluationSentenceDtoRequest -> {
+                    errors.addAll(EvaluationSentenceValidator.validate(evaluationSentenceDtoRequest));
+                    return evaluationSentenceDtoRequest;
+                }
+        );
 
         return errors;
     }

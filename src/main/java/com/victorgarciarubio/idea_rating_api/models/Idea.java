@@ -34,10 +34,7 @@ public class Idea extends AuditEntity {
     private User user;
 
     public float computeRating() {
-        float rating = 0.0F;
-        for (EvaluationSentence evaluationSentence : evaluationSentenceList) {
-            rating += evaluationSentence.computeRating();
-        }
-        return rating;
+        return evaluationSentenceList.stream()
+             .map(EvaluationSentence::computeRating).reduce(0F, Float::sum);
     }
 }

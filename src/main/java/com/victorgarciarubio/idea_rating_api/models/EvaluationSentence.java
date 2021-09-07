@@ -56,14 +56,10 @@ public class EvaluationSentence extends AuditEntity {
     public LocalDateTime updateTime;
 
     public float computeRating() {
-        Float score = weight.getWeight();
-        if (this.userIdeaEvaluationList != null){
-            for (UserIdeaEvaluation userIdeaEvaluation : this.userIdeaEvaluationList) {
-                score += userIdeaEvaluation.computeRating();
-            }
-        }
-        if (type.equals("CON")) return -score;
-        return score;
+        Float score = userIdeaEvaluationList.stream()
+                        .map(UserIdeaEvaluation::computeRating)
+                        .reduce(weight.getWeight(), Float::sum);
+        return type.equals("CON") ? score * (-1) : score;
     }
 }
 
