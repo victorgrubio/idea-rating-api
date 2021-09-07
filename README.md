@@ -6,7 +6,7 @@ Deployed at [**Heroku**](https://heroku.com) using [**CircleCI**](https://circle
 
 [Frontend application repo](https://github.com/victorgrubio/idea-rating-frontend)
 
-See the application working [**here!**](https://ecommerce-angular-app.victorgarciar.com)
+See the application working [**here!**](https://idea-rating-frontend.vercel.app/)
 
 ## Installation
 

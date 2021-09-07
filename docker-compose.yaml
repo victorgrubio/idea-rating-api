@@ -38,7 +38,7 @@ services:
       - API_PORT=8080
       - PROFILE=dev
     ports:
-      - "8080:${API_PORT:8080}"
+      - "${API_PORT}:8080"
     networks:
       - backend
     restart: on-failure
